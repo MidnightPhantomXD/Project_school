@@ -1,40 +1,21 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
-public class Panel {
+public class Panel extends Thread implements Runnable{
+    Graphics graphic;
     Logic logic;
-    final int originalTileSize = 16;
-    final int scale = 3;
+    Thread thread;
+    int FPS = 60;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, mouseClick;
 
-    public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol;
-    public final int screenHeight = tileSize * maxScreenRow;
-
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
-
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new Panel();
-            }
-        });
-    }
     public Panel() {
-        logic = new Logic();
-        Graphics graphic = new Graphics(logic);
+        logic = new Logic(this);
+        graphic = new Graphics(logic);
+        logic.setGraphics(graphic);
+        graphic.setFocusable(true);
         logic.initialize();
-        graphic.render(logic);
-        boolean isGameOver = false;
 
         graphic.addKeyListener(new KeyListener() {
             @Override
@@ -44,25 +25,111 @@ public class Panel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-
-
+                int code = e.getKeyCode();
+                if (code == KeyEvent.VK_W){
+                    upPressed = true;
+                }
+                if (code == KeyEvent.VK_S){
+                    downPressed = true;
+                }
+                if (code == KeyEvent.VK_A){
+                    leftPressed = true;
+                }
+                if (code == KeyEvent.VK_D){
+                    rightPressed = true;
+                }
+                if (code == KeyEvent.VK_E){
+                    ePressed = true;
+                }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                int code = e.getKeyCode();
+                if (code == KeyEvent.VK_W){
+                    upPressed = false;
+                }
+                else if (code == KeyEvent.VK_S){
+                    downPressed = false;
+                }
+                else if (code == KeyEvent.VK_A){
+                    leftPressed = false;
+                }
+                else if (code == KeyEvent.VK_D){
+                    rightPressed = false;
+                }
+                if (code == KeyEvent.VK_E){
+                    ePressed = false;
+                }
+            }
+        });
+
+        graphic.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
 
             }
         });
 
+    }
+    public void startGameThread() {
+        thread = new Thread(this);
+        thread.start();
+    }
+    public void run() {
+        double drawInterval = 1000000000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+        long timer = 0;
+        int drawCount = 0;
 
-        Timer timer = new Timer(100, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        while (thread != null){
+
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
+
+            if (delta >= 1){
                 logic.update();
                 graphic.render(logic);
+                delta--;
+                drawCount++;
             }
-        });
-
-        timer.start();
+            if (timer>= 1000000000){
+                System.out.println("FPS:" + drawCount);
+                drawCount = 0;
+                timer = 0;
+            }
+        }
     }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Panel panel = new Panel();
+            panel.startGameThread();
+
+        });
+    }
+
 }
