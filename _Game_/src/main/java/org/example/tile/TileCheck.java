@@ -9,15 +9,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class TileCheck {
-    Graphics graphics;
+    Graphics graphic;
     public Tile [] tile;
     public int mapTileNum[][];
 
-    public TileCheck(Graphics graphics){
-        this.graphics = graphics;
+    public TileCheck(Graphics graphic){
+        this.graphic = graphic;
 
         tile = new Tile[14];
-        mapTileNum = new int[graphics.maxWorldCol][graphics.maxWorldRow];
+        mapTileNum = new int[graphic.maxScreenCol][graphic.maxScreenRow];
 
         getTileImage();
         loadMap("/maps/World Map.txt");
@@ -53,10 +53,12 @@ public class TileCheck {
             tile[7] = new Tile();
             tile[7].image = ImageIO.read(getClass().getResourceAsStream("/tiles/Shelf_I.png"));
             tile[7].collision = true;
+            tile[7].interactive = true;
 
             tile[8] = new Tile();
             tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tiles/Boxes_I.png"));
             tile[8].collision = true;
+            tile[8].interactive = true;
 
             tile[9] = new Tile();
             tile[9].image = ImageIO.read(getClass().getResourceAsStream("/tiles/A.png"));
@@ -94,11 +96,11 @@ public class TileCheck {
             int col = 0;
             int row = 0;
 
-            while(col < graphics.maxWorldCol && row < graphics.maxWorldRow){
+            while(col < graphic.maxScreenCol && row < graphic.maxScreenRow){
 
                 String line = br.readLine();
 
-                while(col < graphics.maxWorldCol){
+                while(col < graphic.maxScreenCol){
 
                     String numbers[] = line.split(" ");
 
@@ -107,7 +109,7 @@ public class TileCheck {
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if (col == graphics.maxWorldCol){
+                if (col == graphic.maxScreenCol){
                     col = 0;
                     row++;
                 }
@@ -118,6 +120,4 @@ public class TileCheck {
             e.printStackTrace();
         }
     }
-
-
 }

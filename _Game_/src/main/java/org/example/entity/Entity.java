@@ -2,23 +2,20 @@ package org.example.entity;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Entity {
     protected Coordinates coord;
     protected int width;
     protected int height;
-    protected Image image;
+    public BufferedImage down1, down2, down3, up1, up2, up3, left1, left2, left3, right1, right2, right3;
+    public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
-    public Entity(int x, int y, String url) {
+    public Entity(int x, int y) {
         this.coord = new Coordinates(x,y);
-
-        ImageIcon ii = new ImageIcon(getClass().getResource("/" + url));
-        this.image = ii.getImage();
-
-        this.width = ii.getIconWidth();
-        this.height = ii.getIconHeight();
+        this.direction = "down";
     }
     public Coordinates getCoord() {
         return coord;
@@ -32,9 +29,6 @@ public class Entity {
         return height;
     }
 
-    public Image getImage() {
-        return image;
-    }
 
     public int getX() {
         return coord.x;
