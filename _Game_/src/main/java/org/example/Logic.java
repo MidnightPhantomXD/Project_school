@@ -2,26 +2,39 @@ package org.example;
 
 import org.example.entity.Entity;
 import org.example.entity.Player;
-import org.example.tile.Tile;
+import org.example.entity.Weapon;
+import org.example.tile.CollisionCheck;
+import org.example.tile.TileCheck;
+
+import java.util.ArrayList;
 
 public class Logic {
     Player player;
     Panel panel;
-    Graphics graphic;
-    Tile[] tile;
+    GameGraphics graphic;
+    CollisionCheck cCheck;
+    Entity entity;
+    TileCheck tileCheck;
+
+
     public Logic(Panel panel) {
         this.panel = panel;
-        this.player = new Player(100, 100);
+        this.graphic = new GameGraphics(this);
+        this.tileCheck = new TileCheck(graphic);
+        this.cCheck = new CollisionCheck(graphic, tileCheck);
+        this.player = new Player(8 * graphic.tileFin, 6 * graphic.tileFin, graphic);
+        this.entity = player;
     }
 
     public Player getPlayer(){
         return player;
     }
-    public void setGraphics(Graphics graphics) {
+    public void setGraphics(GameGraphics graphics) {
         this.graphic = graphics;
     }
 
     public void initialize(){
+
 
 
     }
@@ -30,26 +43,35 @@ public class Logic {
         if (panel.upPressed == true || panel.downPressed == true || panel.leftPressed == true || panel.rightPressed == true){
             if (panel.upPressed == true){
                 player.direction = "up";
-                player.getCoord().y -= 4;
 
             }
             if (panel.downPressed == true){
                 player.direction = "down";
-                player.getCoord().y += 4;
 
             }
             if (panel.leftPressed == true){
                 player.direction = "left";
-                player.getCoord().x -= 4;
 
             }
             if (panel.rightPressed == true){
                 player.direction = "right";
-                player.getCoord().x += 4;
 
             }
             if (panel.ePressed == true){
 
+            }
+
+            entity.collisionOn = false;
+            cCheck.checkTile(player);
+
+            if (entity.collisionOn == false){
+
+                switch (entity.direction){
+                    case "up": entity.getCoord().y -= entity.speed; break;
+                    case "down": entity.getCoord().y += entity.speed; break;
+                    case "left": entity.getCoord().x -= entity.speed; break;
+                    case "right": entity.getCoord().x += entity.speed; break;
+                }
             }
 
             player.spriteCounter++;
@@ -69,6 +91,6 @@ public class Logic {
                 player.spriteCounter = 0;
             }
         }
-
+        graphic.render(this);
     }
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class Panel extends Thread implements Runnable{
-    Graphics graphic;
+    GameGraphics graphic;
     Logic logic;
     Thread thread;
     int FPS = 60;
@@ -12,7 +12,7 @@ public class Panel extends Thread implements Runnable{
 
     public Panel() {
         logic = new Logic(this);
-        graphic = new Graphics(logic);
+        graphic = new GameGraphics(logic);
         logic.setGraphics(graphic);
         graphic.setFocusable(true);
         logic.initialize();

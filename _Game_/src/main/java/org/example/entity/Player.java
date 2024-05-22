@@ -1,20 +1,29 @@
 package org.example.entity;
 
-import org.example.Graphics;
-import org.example.Logic;
+import org.example.GameGraphics;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity{
         private final int damage;
+        public final int screenX;
+        public final int screenY;
+        GameGraphics graphic;
+        public final int ammo;
 
-        public Player(int x, int y) {
+        public Player(int x, int y, GameGraphics graphic) {
                 super(x, y);
                 this.damage = 5;
+                this.graphic = graphic;
+                this.speed = 4;
+                this.ammo = 0;
 
+                solidArea = new Rectangle(16, 32, 64, 64);
+
+                screenX = graphic.screenWidth / 2 - (graphic.tileFin / 2);
+                screenY = graphic.screenHeight / 2 - (graphic.tileFin / 2);
 
                 getPlayerImage();
         }

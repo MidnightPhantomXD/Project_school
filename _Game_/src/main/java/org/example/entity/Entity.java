@@ -1,6 +1,5 @@
 package org.example.entity;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -12,10 +11,14 @@ public class Entity {
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public Rectangle solidArea;
+    public boolean collisionOn = false;
+    public int speed;
 
     public Entity(int x, int y) {
         this.coord = new Coordinates(x,y);
         this.direction = "down";
+
     }
     public Coordinates getCoord() {
         return coord;

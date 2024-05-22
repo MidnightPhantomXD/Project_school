@@ -1,6 +1,6 @@
 package org.example.tile;
 
-import org.example.Graphics;
+import org.example.GameGraphics;
 
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
@@ -9,15 +9,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class TileCheck {
-    Graphics graphic;
+    GameGraphics graphic;
     public Tile [] tile;
     public int mapTileNum[][];
 
-    public TileCheck(Graphics graphic){
+    public TileCheck(GameGraphics graphic){
         this.graphic = graphic;
 
         tile = new Tile[14];
-        mapTileNum = new int[graphic.maxScreenCol][graphic.maxScreenRow];
+        mapTileNum = new int[graphic.maxWorldCol][graphic.maxWorldRow];
 
         getTileImage();
         loadMap("/maps/World Map.txt");
@@ -96,22 +96,22 @@ public class TileCheck {
             int col = 0;
             int row = 0;
 
-            while(col < graphic.maxScreenCol && row < graphic.maxScreenRow){
+            while(col < graphic.maxWorldCol && row < graphic.maxWorldRow){
 
                 String line = br.readLine();
 
-                while(col < graphic.maxScreenCol){
+                while(row < graphic.maxWorldRow){
 
                     String numbers[] = line.split(" ");
 
-                    int num = Integer.parseInt(numbers[col]);
+                    int num = Integer.parseInt(numbers[row]);
 
-                    mapTileNum[col][row] = num;
-                    col++;
-                }
-                if (col == graphic.maxScreenCol){
-                    col = 0;
+                    mapTileNum[row][col] = num;
                     row++;
+                }
+                if (row == graphic.maxWorldRow){
+                    row = 0;
+                    col++;
                 }
             }
             br.close();
